@@ -10,16 +10,25 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let notificationName = Notification.Name(CustomNotificationKeys.customKey)
+    
+    @IBOutlet weak var notifLblOutlet: UILabel!
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        createObservers()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func createObservers () {
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.updateLabel(notification:)), name: notificationName, object: nil)
     }
-
-
+    
+    @objc func updateLabel (notification: NSNotification) {
+        notifLblOutlet.text = "\(notification.object ?? "didn't receive")"
+    }
+    
 }
-
